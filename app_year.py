@@ -7,8 +7,63 @@ import numpy as np
 
 # import data
 SKU = pd.read_csv('SKU_year.csv')
+face_year = pd.read_csv('face_year.csv')
 # change timestamp datatype to datetime
 SKU['date'] = pd.to_datetime(SKU['date'])
+
+
+def weekday_weekend(df):
+    df = df.groupby(['is_weekend']).mean().round(2).T
+
+    data = [go.Bar(
+        x=['进门率', '转化率', '女性占比', '回头客比例', '开心比例', '有伴比例'],
+        y=df[0],
+        marker=dict(color='#454552'),
+        opacity=0.8,
+        name='周中'
+    ),
+        go.Bar(
+            x=['进门率', '转化率', '女性占比', '回头客比例', '开心比例', '有伴比例'],
+            y=df[1],
+            marker=dict(color='#e85a71'),
+            opacity=0.8,
+            name='周末'
+        )
+    ]
+    layout = dict(
+        title="各项指标，周末vs周中",
+        font=dict(family='微软雅黑'),
+        yaxis=dict(tickformat=".0%")
+    )
+
+    fig = dict(data=data, layout=layout)
+    return fig
+
+
+def gender_accompany():
+    data = [go.Bar(
+        x=['结伴', '独行'],
+        y=[18.2, 13.5],
+        marker=dict(color='#e85a71'),
+        opacity=0.8,
+        name='女'
+    ),
+        go.Bar(
+            x=['结伴', '独行'],
+            y=[10.8, 16.2],
+            marker=dict(color='#4ea1d3'),
+            opacity=0.8,
+            name='男'
+        )
+    ]
+    layout = dict(
+        title="结伴和独行的男女比例",
+        font=dict(family='微软雅黑'),
+        yaxis=dict(title='人数（万）')
+    )
+
+    fig = dict(data=data, layout=layout)
+    return fig
 
 
 # function to profit per quarter
@@ -217,14 +272,15 @@ app.layout = html.Div([
             style={
                 'textAlign': 'center'
             }),
-    html.Div(children='Dashboard Demo by Ariel Li, May 28 2019',
+    html.Div(children='Dashboard Demo by Ariel Li, June 10 2019',
              style={
                  'textAlign': 'center'
              }),
     dcc.Tabs(id="tabs", value='tab-2', children=[
         dcc.Tab(label='时间分析', value='tab-1'),
         dcc.Tab(label='产品分析', value='tab-2'),
-        dcc.Tab(label='区域分析', value='tab-3')
+        dcc.Tab(label='区域分析', value='tab-3'),
+        dcc.Tab(label='顾客分析', value='tab-4')
     ]),
     html.Div(id='tabs-content')
 ])
@@ -274,6 +330,20 @@ def render_content(tab):
                 id='fig6',
                 figure=zone_perform(SKU)
             )
+        ])
+    elif tab == 'tab-4':
+        return html.Div([
+            html.H5('示例小结：回头客比例周中周末无明显差别，所有其他指标周末均比周中高，周末应投入更大精力营销。另外女性更倾向于结伴而行。'),
+
+            html.Div([
+                html.Div([
+                    dcc.Graph(id='fig7', figure=weekday_weekend(face_year))
+                ], className="six columns"),
+
+                html.Div([
+                    dcc.Graph(id='fig8', figure=gender_accompany())
+                ], className="six columns")
+            ], className="row")
         ])
 
 

@@ -390,3 +390,50 @@ store_comp = pd.DataFrame({
 })
 
 store_comp.to_csv('store_comp_year.csv', index=False)
+
+
+# table 'face_year'
+random.seed(233)
+Date = pd.date_range('2018-01-01', '2018-12-31', freq='D').strftime("%Y-%m-%d").tolist()
+weekday = pd.date_range('2018-01-01', '2018-12-31', freq='D').strftime("%A").tolist()
+in_rate = []
+conv_rate = []
+female_pc = []
+return_customer_pc = []
+happy_pc = []
+accompany_pc = []
+is_weekend = []
+
+for i in range(len(weekday)):
+    if weekday[i] == 'Saturday' or weekday[i] == 'Sunday':
+        is_weekend.append(1)
+        in_rate.append(round(random.uniform(0.3, 0.5), 2))
+        conv_rate.append(round(random.uniform(0.2, 0.4), 2))
+        female_pc.append(round(random.uniform(0.5, 0.65), 2))
+        return_customer_pc.append(round(random.uniform(0.1, 0.25), 2))
+        happy_pc.append(round(random.uniform(0.3, 0.6), 2))
+        accompany_pc.append(round(random.uniform(0.4, 0.7), 2))
+    else:
+        is_weekend.append(0)
+        in_rate.append(round(random.uniform(0.1, 0.35), 2))
+        conv_rate.append(round(random.uniform(0.15, 0.35), 2))
+        female_pc.append(round(random.uniform(0.4, 0.6), 2))
+        return_customer_pc.append(round(random.uniform(0.1, 0.25), 2))
+        happy_pc.append(round(random.uniform(0.25, 0.4), 2))
+        accompany_pc.append(round(random.uniform(0.4, 0.5), 2))
+
+
+face_year = pd.DataFrame({
+    'Date': Date,
+    'weekday': weekday,
+    'is_weekend': is_weekend,
+    'in_rate': in_rate,
+    'conv_rate': conv_rate,
+    'female_pc': female_pc,
+    'return_customer': return_customer_pc,
+    'happy': happy_pc,
+    'accompany': accompany_pc
+})
+
+
+face_year.to_csv('face_year.csv', index=False)

@@ -234,8 +234,82 @@ def sankey_flow(dataframe):
 
     # Setting up the layout settings in the "layout" argument
     layout = dict(
-        title="人流路线",
-        font=dict(family='微软雅黑')
+        title="人流路线（数字为在前一区停留的分钟数）",
+        font=dict(family='微软雅黑'),
+        xaxis=dict(
+            range=[0, 3],
+            showgrid=False,
+            zeroline=False,
+            showline=False,
+            ticks='',
+            showticklabels=False
+        ),
+        yaxis=dict(
+            range=[0, 4],
+            showgrid=False,
+            zeroline=False,
+            showline=False,
+            ticks='',
+            showticklabels=False
+        ),
+        annotations=[
+            dict(
+                x=2,
+                y=3.2,
+                xref='x',
+                yref='y',
+                text='5',
+                showarrow=False
+            ),
+            dict(
+                x=2,
+                y=2.3,
+                xref='x',
+                yref='y',
+                text='8',
+                showarrow=False
+            ),
+            dict(
+                x=2,
+                y=2.3,
+                xref='x',
+                yref='y',
+                text='8',
+                showarrow=False
+            ),
+            dict(
+                x=1.7,
+                y=1.8,
+                xref='x',
+                yref='y',
+                text='12',
+                showarrow=False
+            ),
+            dict(
+                x=1.7,
+                y=1.4,
+                xref='x',
+                yref='y',
+                text='3',
+                showarrow=False
+            ),
+            dict(
+                x=2,
+                y=1,
+                xref='x',
+                yref='y',
+                text='7',
+                showarrow=False
+            ),
+            dict(
+                x=2,
+                y=0.3,
+                xref='x',
+                yref='y',
+                text='5',
+                showarrow=False
+            )
+        ]
     )
 
     fig = dict(data=[data], layout=layout)
@@ -480,7 +554,7 @@ app.layout = html.Div([
             style={
                 'textAlign': 'center'
             }),
-    html.Div(children='Dashboard Demo by Ariel Li, June 04 2019',
+    html.Div(children='Dashboard Demo by Ariel Li, June 10 2019',
              style={
                  'textAlign': 'center'
              }),
@@ -517,7 +591,8 @@ def render_content(tab):
         ])
     elif tab == 'tab-2':
         return html.Div([
-            html.H5('小结：进门后中区1和2分流效果相当，顾客在中区1停留时间较长，但中区2比中区1留客效果好。'),
+            html.H5(
+                '小结：进门后中区1和2分流效果相当，顾客在中区1停留时间较长，但中区2比中区1留客效果好。那些选择从中区回到进门区进而离开的顾客，在中区停留时间较短。店家应想办法让顾客在中区停留5分钟以上，那么他们更有可能在店内继续体验。'),
 
             dcc.Graph(
                 id='fig4',
